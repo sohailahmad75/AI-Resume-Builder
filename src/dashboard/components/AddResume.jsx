@@ -1,9 +1,9 @@
 import React from "react";
 import { PlusSquare } from "lucide-react";
 
-const AddResume = () => {
+const AddResume = ({ ...props }) => {
   return (
-    <div>
+    <div {...props}>
       <div
         className="p-14 py-24 border items-center flex
       justify-center bg-secondary rounded-lg h-[280px]

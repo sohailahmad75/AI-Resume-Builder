@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AddResume from "@/dashboard/components/AddResume.jsx";
 import {
   Dialog,
@@ -13,25 +13,42 @@ import { v4 as uuidv4 } from "uuid";
 import GlobalApi from "../../service/GlobalApi.js";
 import { useUser } from "@clerk/clerk-react";
 import { Loader2 } from "lucide-react";
+import ResumeCardItem from "@/dashboard/components/ResumeCardItem.jsx";
+import { useNavigate } from "react-router";
 
 const Dashboard = () => {
   const [open, setOpen] = useState(false);
   const [resumeTitle, setResumeTitle] = useState("");
   const { user } = useUser();
   const [loading, setLoading] = useState(false);
+  const [resumesLoading, setResumesLoading] = useState(false);
+  const [resumes, setResumes] = useState([]);
+  let navigate = useNavigate();
+  useEffect(() => {
+    if (user && user?.primaryEmailAddress?.emailAddress) {
+      setResumesLoading(true);
+      GlobalApi.GetAllUserResumes(user?.primaryEmailAddress?.emailAddress).then(
+        (res) => {
+          setResumes(res.data);
+          setResumesLoading(false);
+        },
+      );
+    }
+  }, [user]);
+
   const onCreateResume = async () => {
     const uuid = uuidv4();
-    console.log("Create new resume with title: ", user);
     try {
       setLoading(true);
-      const { data } = await GlobalApi.CreateNewResume({
+      await GlobalApi.CreateNewResume({
         title: resumeTitle,
         resumeId: uuid,
         userEmail: user?.primaryEmailAddress?.emailAddress,
         userName: user.fullName,
       });
-      console.log("datadata", data);
       setLoading(false);
+      setOpen(false);
+      navigate(`/dashboard/resume/${uuid}/edit`);
     } catch (error) {
       console.error("CreateNewResume -> error", error);
     }
@@ -43,11 +60,12 @@ const Dashboard = () => {
         Start Creating A Resume to your next job with our easy to use resume
         builder.
       </p>
-      <div
-        className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mt-10"
-        onClick={() => setOpen(true)}
-      >
-        <AddResume />
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-5 mt-10">
+        <AddResume onClick={() => setOpen(true)} />
+        {resumes?.data?.map((resume) => (
+          <ResumeCardItem key={resume.resumeId} resume={resume} />
+        ))}
+        {resumesLoading && <>Loading...</>}
       </div>
 
       <Dialog open={open} onOpenChange={setOpen}>
