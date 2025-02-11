@@ -5,8 +5,6 @@ import Header from "@/components/custom/Header.jsx";
 
 function App() {
   const { user, isLoaded, isSignedIn } = useUser();
-
-  console.log({ user, isLoaded, isSignedIn });
   if (!user && isSignedIn) return Navigate({ to: "/auth/sign-in" });
   return (
     <>

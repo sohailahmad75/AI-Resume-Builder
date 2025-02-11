@@ -40,7 +40,7 @@ const Dashboard = () => {
     const uuid = uuidv4();
     try {
       setLoading(true);
-      await GlobalApi.CreateNewResume({
+      const { data } = await GlobalApi.CreateNewResume({
         title: resumeTitle,
         resumeId: uuid,
         userEmail: user?.primaryEmailAddress?.emailAddress,
@@ -48,7 +48,7 @@ const Dashboard = () => {
       });
       setLoading(false);
       setOpen(false);
-      navigate(`/dashboard/resume/${uuid}/edit`);
+      navigate(`/dashboard/resume/${data?.data?.documentId}/edit`);
     } catch (error) {
       console.error("CreateNewResume -> error", error);
     }
