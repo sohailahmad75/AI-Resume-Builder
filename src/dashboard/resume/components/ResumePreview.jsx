@@ -22,7 +22,6 @@ const ResumePreview = () => {
       {/*  Educational*/}
       <EducationalPreview resumeInfo={resumeInfo} />
       {/*  Skills*/}
-
       <SkillsPreview resumeInfo={resumeInfo} />
     </div>
   );

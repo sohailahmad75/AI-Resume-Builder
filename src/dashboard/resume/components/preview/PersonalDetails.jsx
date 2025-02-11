@@ -12,12 +12,12 @@ const PersonalDetails = ({ resumeInfo }) => {
         {resumeInfo?.firstName} {resumeInfo?.lastName}
       </h2>
       <h2 className="text-sm text-center font-medium">
-        {resumeInfo?.firstName} {resumeInfo?.jobTitle}
+        {resumeInfo?.jobTitle}
       </h2>
       <h2 className="text-xs text-center font-normal">{resumeInfo?.address}</h2>
       <div className="flex justify-between mt-2">
         <h2 className="text-xs font-normal">{resumeInfo?.phone}</h2>
-        <span className="border-r-[1px] h-auto"></span>
+        {/*<span className="border-r-[1px] h-auto"></span>*/}
         <h2 className="text-xs font-normal">{resumeInfo?.email}</h2>
       </div>
 

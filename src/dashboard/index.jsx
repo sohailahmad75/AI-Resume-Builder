@@ -15,6 +15,7 @@ import { useUser } from "@clerk/clerk-react";
 import { Loader2 } from "lucide-react";
 import ResumeCardItem from "@/dashboard/components/ResumeCardItem.jsx";
 import { useNavigate } from "react-router";
+import { toast } from "sonner";
 
 const Dashboard = () => {
   const [open, setOpen] = useState(false);
@@ -46,11 +47,14 @@ const Dashboard = () => {
         userEmail: user?.primaryEmailAddress?.emailAddress,
         userName: user.fullName,
       });
-      setLoading(false);
       setOpen(false);
+      toast.success("Resume Created Successfully.");
       navigate(`/dashboard/resume/${data?.data?.documentId}/edit`);
     } catch (error) {
+      toast.error("Error Creating Resume. Please try again.");
       console.error("CreateNewResume -> error", error);
+    } finally {
+      setLoading(false);
     }
   };
   return (
@@ -62,8 +66,9 @@ const Dashboard = () => {
       </p>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-5 mt-10">
         <AddResume onClick={() => setOpen(true)} />
+        {console.log("resumes", resumes)}
         {resumes?.data?.map((resume) => (
-          <ResumeCardItem key={resume.resumeId} resume={resume} />
+          <ResumeCardItem key={resume.id} resume={resume} />
         ))}
         {resumesLoading && <>Loading...</>}
       </div>
